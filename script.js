@@ -86,8 +86,15 @@ function getLearnerData(course, ag, submissions) {
     // Iterate through learner submissions
     for (const submission of submissions) {
         const { learner_id, assignment_id, submission: { submitted_at, score } } = submission;
-  
 
+        // Check if the assignment is due and not late
+      if (isAssignmentDue(AssignmentGroup, assignment_id, submitted_at)) {
+        const assignmentWeight = getAssignmentWeight(AssignmentGroup, assignment_id);
+        const weightedScore = calculateWeightedScore(score, assignmentWeight);
+      }
+      
+    }
+    
  } catch (error) {
     console.error(error.message);
     return [];
@@ -123,6 +130,36 @@ const validateInput = (CourseInfo, AssignmentGroup, LearnerSubmissions) => {
 // Helper function to check if a value is a number
 const isNumber = (value)=> {
     return typeof value === 'number' && !isNaN(value);
+  }
+
+  
+// Helper function to check if an assignment is due and not late
+function isAssignmentDue(assignmentGroup, assignmentId, submittedAt) {
+    // Implement due date and late submission logic here
+    // ...
+  
+    // Example: Check if the submitted date is before the due date
+    const assignment = assignmentGroup.assignments.find(a => a.id === assignmentId);
+    return new Date(submittedAt) <= new Date(assignment.due_at);
+  }
+
+  // Helper function to get the weight of an assignment within its group
+function getAssignmentWeight(assignmentGroup, assignmentId) {
+    // Implement assignment weight retrieval logic here
+    // ...
+  
+    // Example: Return the weight from the assignment group
+    const assignment = assignmentGroup.assignments.find(a => a.id === assignmentId);
+    return assignment.points_possible * (assignmentGroup.group_weight / 100);
+  }
+  
+  // Helper function to calculate the weighted score for an assignment
+function calculateWeightedScore(score, weight) {
+    // Implement weighted score calculation logic here
+    // ...
+  
+    // Example: Deduct 10% for late submissions
+    return score * (1 - 0.1);
   }
 const result = getLearnerData(CourseInfo, AssignmentGroup, LearnerSubmissions);
 
