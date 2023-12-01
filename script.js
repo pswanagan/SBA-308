@@ -83,7 +83,10 @@ function getLearnerData(course, ag, submissions) {
     validateInput(course, ag, submissions);
 
     const learnerData = {};
-    
+    // Iterate through learner submissions
+    for (const submission of submissions) {
+        const { learner_id, assignment_id, submission: { submitted_at, score } } = submission;
+  
 
  } catch (error) {
     console.error(error.message);
