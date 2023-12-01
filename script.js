@@ -98,17 +98,19 @@ const validateInput = (CourseInfo, AssignmentGroup, LearnerSubmissions) => {
         throw new Error('Invalid input: AssignmentGroup does not belong to the specified course.');
       }
     
-      for(let i = 0; i < AssignmentGroup.assignments.length; i++){
-        for(let j = 0; )
-        console.log(AssignmentGroup.assignments[i]);
-        if(AssignmentGroup.assignments[i]. == 0){
-            throw new Error("Invalid input: Assignment Points possible can't be 0.")
-        }
-      }
+     // Check if points_possible is zero for any assignment
+  for (const assignment of AssignmentGroup.assignments) {
+    if (assignment.points_possible === 0) {
+      throw new Error('Invalid input: points_possible cannot be zero for an assignment.');
+    }
+  }
     
 
 }
-
+// Helper function to check if a value is a number
+const isNumber = (value)=> {
+    return typeof value === 'number' && !isNaN(value);
+  }
 const result = getLearnerData(CourseInfo, AssignmentGroup, LearnerSubmissions);
 
 console.log(result);
