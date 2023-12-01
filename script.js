@@ -15,7 +15,7 @@ const AssignmentGroup = {
       id: 1,
       name: "Declare a Variable",
       due_at: "2023-01-25",
-      points_possible: 0,
+      points_possible: 50,
     },
     {
       id: 2,
@@ -104,7 +104,17 @@ const validateInput = (CourseInfo, AssignmentGroup, LearnerSubmissions) => {
       throw new Error('Invalid input: points_possible cannot be zero for an assignment.');
     }
   }
-    
+    // Check if values expected to be numbers are actually numbers
+  if (!isNumber(CourseInfo.id) || !isNumber(AssignmentGroup.group_weight)) {
+    throw new Error('Invalid input: Expected numerical values are not valid numbers.');
+  }
+
+  // Check if values expected to be numbers are actually numbers in assignments
+  for (const assignment of AssignmentGroup.assignments) {
+    if (!isNumber(assignment.id) || !isNumber(assignment.points_possible)) {
+      throw new Error('Invalid input: Expected numerical values are not valid numbers in assignments.');
+    }
+  }
 
 }
 // Helper function to check if a value is a number
