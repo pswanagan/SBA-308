@@ -80,20 +80,39 @@ function getLearnerData(course, ag, submissions) {
   // here, we would process this data to achieve the desired result.
  try {
     // Validate input data
-    validateInput(course, ag, submissions);
+    validateInput(courseInfo, assignmentGroup, learnerSubmissions);
 
     const learnerData = {};
-    // Iterate through learner submissions
-    for (const submission of submissions) {
-        const { learner_id, assignment_id, submission: { submitted_at, score } } = submission;
 
-        // Check if the assignment is due and not late
-      if (isAssignmentDue(AssignmentGroup, assignment_id, submitted_at)) {
-        const assignmentWeight = getAssignmentWeight(AssignmentGroup, assignment_id);
+    // Iterate through learner submissions
+    for (const submission of learnerSubmissions) {
+      const { learner_id, assignment_id, submission: { submitted_at, score } } = submission;
+
+      // Check if the assignment is due and not late
+      if (isAssignmentDue(assignmentGroup, assignment_id, submitted_at)) {
+        const assignmentWeight = getAssignmentWeight(assignmentGroup, assignment_id);
         const weightedScore = calculateWeightedScore(score, assignmentWeight);
+
+        // Update learner data
+        if (!learnerData[learner_id]) {
+          learnerData[learner_id] = { id: learner_id, avg: 0 };
+        }
+
+        learnerData[learner_id][assignment_id] = weightedScore;
+        learnerData[learner_id].avg += weightedScore;
       }
-      
     }
+
+    // Calculate the overall average for each learner
+    for (const learnerId in learnerData) {
+      const totalWeight = getTotalWeight(assignmentGroup);
+      learnerData[learnerId].avg = (learnerData[learnerId].avg / totalWeight) * 100;
+    }
+
+    // Convert learnerData object to an array
+    const result = Object.values(learnerData);
+
+    return result;
     
  } catch (error) {
     console.error(error.message);
