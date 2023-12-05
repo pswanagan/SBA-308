@@ -105,7 +105,11 @@ const CourseInfo = {
           learnerData[learner_id].totalPoints += pointsPossible;
           //collect the actual points gotten
           learnerData[learner_id].avg += assignmentScores;
+          // Check if the learner's average exceeds 90%, and break out of the loop
+        if (learnerData[learner_id].avg / learnerData[learner_id].totalPoints > 1.0) {
+            break;
         }
+    }
       }
   // Calculate the overall average for each learner and deleting the totalPoints
   for (const learnerId in learnerData) {
@@ -163,6 +167,7 @@ const getAssignmentScore = (assignmentGroup, assignmentId, submitted, score,dedu
     if (submissionDate > dueDate) {
       // Deduct 10% for late submissions
       const lateDeduction = assignment.points_possible * deductionPercentage;
+      // Ensure the score doesn't go below 0 after deduction
       return Math.max(0, score - lateDeduction);
     } else {
       return score;
