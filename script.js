@@ -88,7 +88,7 @@ function getLearnerData(course, ag, submissions) {
     for (const submission of submissions) {
       const { learner_id, assignment_id, submission: { submitted_at, score } } = submission;
 
-      // Check if the assignment is due and not late
+    
       // Check if the assignment is due and not late
       if (!isAssignmentDue(ag, assignment_id, submitted_at)) {
         // If the assignment is not due, skip the current submission and move to the next one
