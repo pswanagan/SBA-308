@@ -80,17 +80,17 @@ function getLearnerData(course, ag, submissions) {
   // here, we would process this data to achieve the desired result.
  try {
     // Validate input data
-    validateInput(courseInfo, assignmentGroup, learnerSubmissions);
+    validateInput(course, ag, submissions);
 
     const learnerData = {};
 
     // Iterate through learner submissions
-    for (const submission of learnerSubmissions) {
+    for (const submission of submissions) {
       const { learner_id, assignment_id, submission: { submitted_at, score } } = submission;
 
       // Check if the assignment is due and not late
-      if (isAssignmentDue(assignmentGroup, assignment_id, submitted_at)) {
-        const assignmentWeight = getAssignmentWeight(assignmentGroup, assignment_id);
+      if (isAssignmentDue(AssignmentGroup, assignment_id, submitted_at)) {
+        const assignmentWeight = getAssignmentWeight(AssignmentGroup, assignment_id);
         const weightedScore = calculateWeightedScore(score, assignmentWeight);
 
         // Update learner data
@@ -105,7 +105,7 @@ function getLearnerData(course, ag, submissions) {
 
     // Calculate the overall average for each learner
     for (const learnerId in learnerData) {
-      const totalWeight = getTotalWeight(assignmentGroup);
+      const totalWeight = getTotalWeight(ag);
       learnerData[learnerId].avg = (learnerData[learnerId].avg / totalWeight) * 100;
     }
 
@@ -153,7 +153,7 @@ const isNumber = (value)=> {
 
   
 // Helper function to check if an assignment is due and not late
-function isAssignmentDue(assignmentGroup, assignmentId, submittedAt) {
+const isAssignmentDue = (assignmentGroup, assignmentId, submittedAt) => {
     // Implement due date and late submission logic here
     // ...
   
@@ -179,6 +179,17 @@ function calculateWeightedScore(score, weight) {
   
     // Example: Deduct 10% for late submissions
     return score * (1 - 0.1);
+  }
+
+  // Helper function to calculate the total weight of all assignments in a group
+function getTotalWeight(assignmentGroup) {
+    // Implement total weight calculation logic here
+    // ...
+  
+    // Example: Sum the weights of all assignments in the group
+    return assignmentGroup.assignments.reduce((total, assignment) => {
+      return total + assignment.points_possible * (assignmentGroup.group_weight / 100);
+    }, 0);
   }
 const result = getLearnerData(CourseInfo, AssignmentGroup, LearnerSubmissions);
 
