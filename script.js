@@ -88,7 +88,6 @@ function getLearnerData(course, ag, submissions) {
     for (const submission of submissions) {
       const { learner_id, assignment_id, submission: { submitted_at, score } } = submission;
 
-    
       // Check if the assignment is due and not late
       if (!isAssignmentDue(ag, assignment_id, submitted_at)) {
         // If the assignment is not due, skip the current submission and move to the next one
@@ -98,14 +97,13 @@ function getLearnerData(course, ag, submissions) {
       const assignmentWeight = getAssignmentWeight(ag, assignment_id);
       const weightedScore = calculateWeightedScore(score, assignmentWeight);
 
-        // Update learner data
-        if (!learnerData[learner_id]) {
-          learnerData[learner_id] = { id: learner_id, avg: 0 };
-        }
-
-        learnerData[learner_id][assignment_id] = weightedScore;
-        learnerData[learner_id].avg += weightedScore;
+      // Update learner data
+      if (!learnerData[learner_id]) {
+        learnerData[learner_id] = { id: learner_id, avg: 0 };
       }
+
+      learnerData[learner_id][assignment_id] = weightedScore;
+      learnerData[learner_id].avg += weightedScore;
     }
 
     // Calculate the overall average for each learner
